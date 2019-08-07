@@ -30,18 +30,36 @@
             convID = null;
         };
         
+        
+        function pushData(myData) {
+		    var xhr = new XMLHttpRequest();
+        	    xhr.addEventListener("readystatechange", function () {
+          		    if (this.readyState === 4) {
+				    // var jsonResult = JSON.parse(this.responseText);
+				    console.log(xhr.response);
+				    if (xhr.response === "error"){
+                        console.log("success");
+
+				    } else{
+                        console.log("error");
+				    }
+                        
+
+          		}	
+        	});
+        	var URLforGET = "https://marcowabot.herokuapp.com/add?data=" + myData;
+		    console.log(URLforGET);
+		    xhr.open("GET", URLforGET);
+        	xhr.send();
+		
+	    }	
+        
+        
       
         var updateCallback = function(data) {
             
             console.log("data --> " + JSON.stringify(data.newValue));
-            
-            var chatLine = data.newValue.lines[0].text.replace(/(<p[^>]*>|<\/p>)/g, "");
-           
-            if (data.newValue.lines[0].source == 'visitor') {           
-                console.log("visitor --> " + convID)
-            } else{
-                console.log("agent --> " + convID);
-            }
+            pushData(myData)
             
         };
         
