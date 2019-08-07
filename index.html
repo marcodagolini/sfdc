@@ -32,25 +32,27 @@
         
         
         function pushData(myData) {
-		    var xhr = new XMLHttpRequest();
-        	    xhr.addEventListener("readystatechange", function () {
-          		    if (this.readyState === 4) {
-				    // var jsonResult = JSON.parse(this.responseText);
-				    console.log(xhr.response);
-				    if (xhr.response === "error"){
-                        console.log("success");
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener("readystatechange", function () {
+			if (this.readyState === 4) {
+				// var jsonResult = JSON.parse(this.responseText);
+				console.log(xhr.response);
+				if (xhr.response === "error"){
+					console.log("success");
 
-				    } else{
-                        console.log("error");
-				    }
+				} else{
+					console.log("error");
+				}
                         
 
-          		}	
+			}	
         	});
-        	var URLforGET = "https://marcowabot.herokuapp.com/add?data=" + myData;
-		    console.log(URLforGET);
-		    xhr.open("GET", URLforGET);
-        	xhr.send();
+        	var URLforPOST = "https://marcowabot.herokuapp.com/add?tipeOfRequest=push";
+		console.log(URLforPOST);
+		xhr.open("POST", URLforPOST, true);
+		// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send(JSON.stringify(myData));
 		
 	    }	
         
