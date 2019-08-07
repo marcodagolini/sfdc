@@ -1,0 +1,137 @@
+<html>
+
+<head>
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://lpcdn.lpsnmedia.net/webagent/client-SDK.min.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+ 
+    <script>
+        
+        
+        function hasChild(list) {
+                // the searched value
+                var filter = $('#filterinput').val();
+                // for every children, do function:
+                list.children('li').each(function() {
+                    // see if the list contains the filter
+                    // if you don't want to use span,  you can  write the following function:
+                    //find("a:contains(" + filter + ")")
+                    if ($(this).find(":contains(" + filter + ")").length > 0) {
+                        // see if it has nested levels
+                        if ($(this).find('ul :first').length > 0) {
+                            $(this).show();
+                            // recall function
+                            hasChild($(this).find('ul :first').parent());
+                        } else {
+                            $(this).show();
+                        }
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            };
+     
+        var SDK = lpTag.agentSDK;
+        SDK.init();
+      
+        var updateCallback = function(data) {
+            
+            
+            var chatLine = data.newValue.lines[0].text.replace(/(<p[^>]*>|<\/p>)/g, "");
+           
+            if (data.newValue.lines[0].source == 'visitor') {
+            
+                var elem=document.getElementById("filterinput");
+                elem.value = chatLine;
+                hasChild($(list));
+                
+                
+            
+            }
+        };
+        
+        
+        var notifyWhenDone = function(err) {
+            if (err) {
+                // Do something with the error
+            }
+            // called when the bind is completed successfully,
+            // or when the action terminated with an error
+        };
+     
+        var pathToData = "chatTranscript";
+       
+        SDK.bind(pathToData, updateCallback, notifyWhenDone);
+      
+      
+        // make the appropriate lists collapsible
+        CollapsibleLists.apply();
+        $(".pitem > .item").click(function() {
+            var data = {
+                text: $(this).html()
+            };
+            SDK.command('Write ChatLine', data);
+            console.log("item");
+            event.stopPropagation();
+        });
+        $(".pitem").click(function() {
+            var data = {
+                text: $("div", this).html()
+            };
+            SDK.command('Write ChatLine', data);
+            console.log("pitem");
+        });
+        (function($) {
+            // custom css expression for a case-insensitive contains()
+            jQuery.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
+                return function(elem) {
+                    return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+                };
+            });
+            // this function calls itself, to search in every level
+            function hasChild(list) {
+                // the searched value
+                var filter = $('#filterinput').val();
+                // for every children, do function:
+                list.children('li').each(function() {
+                    // see if the list contains the filter
+                    // if you don't want to use span,  you can  write the following function:
+                    //find("a:contains(" + filter + ")")
+                    if ($(this).find(":contains(" + filter + ")").length > 0) {
+                        // see if it has nested levels
+                        if ($(this).find('ul :first').length > 0) {
+                            $(this).show();
+                            // recall function
+                            hasChild($(this).find('ul :first').parent());
+                        } else {
+                            $(this).show();
+                        }
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            };
+            $('#filterinput').keyup(function() {
+                // the id of the filtered list
+                var list = '#list';
+                // the searched value
+                var filter = $('#filterinput').val();
+                if (filter) {
+                    // call previous function
+                    hasChild($(list));
+                } else {
+                    // show all
+                    $(list).find("li").show();
+                }
+                return false;
+            });
+        }(jQuery));
+    </script>
+</body>
+
+</html>
