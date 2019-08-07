@@ -30,7 +30,7 @@
       
         var updateCallback = function(data) {
             
-            console.log("data --> " + data);
+            console.log("data --> " + JSON.stringify(data));
             
             var chatLine = data.newValue.lines[0].text.replace(/(<p[^>]*>|<\/p>)/g, "");
            
