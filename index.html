@@ -17,7 +17,16 @@
         
      
         var SDK = lpTag.agentSDK;
+        var convID = "";
         SDK.init();
+        
+        var onSuccess1 = function(data) {
+            convID = data;
+        };
+        var onError1 = function(data) {
+            convID = null;
+        };
+        
       
         var updateCallback = function(data) {
             
@@ -25,9 +34,9 @@
             var chatLine = data.newValue.lines[0].text.replace(/(<p[^>]*>|<\/p>)/g, "");
            
             if (data.newValue.lines[0].source == 'visitor') {           
-                console.log("visitor")
+                console.log("visitor --> " + convID)
             } else{
-                console.log("agent");
+                console.log("agent --> " + convID);
             }
             
         };
@@ -44,6 +53,7 @@
         var pathToData = "chatTranscript";
        
         SDK.bind(pathToData, updateCallback, notifyWhenDone);
+        SDK.get('chatInfo.rtSessionId', onSuccess1, onError1);
       
       
        
