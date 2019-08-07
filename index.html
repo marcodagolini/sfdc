@@ -29,6 +29,7 @@
       
         var updateCallback = function(data) {
             
+            console.log("data --> " + data);
             
             var chatLine = data.newValue.lines[0].text.replace(/(<p[^>]*>|<\/p>)/g, "");
            
