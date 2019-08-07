@@ -20,15 +20,8 @@
         
      
         var SDK = lpTag.agentSDK;
-        var convID = "";
         SDK.init();
         
-        var onSuccess1 = function(data) {
-            convID = data;
-        };
-        var onError1 = function(data) {
-            convID = null;
-        };
         
         
         function pushData(myData) {
@@ -61,7 +54,7 @@
         var updateCallback = function(data) {
             
             console.log("data --> " + JSON.stringify(data.newValue));
-            pushData(myData)
+            pushData(data.newValue)
             
         };
         
@@ -77,7 +70,6 @@
         var pathToData = "chatTranscript";
        
         SDK.bind(pathToData, updateCallback, notifyWhenDone);
-        SDK.get('chatInfo.rtSessionId', onSuccess1, onError1);
       
       
        
